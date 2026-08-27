@@ -6,6 +6,36 @@ body {
 
     margin: 0;
     min-height: 100vh;
+
+    
+}
+
+
+
+
+/*WIP BOX*/
+.boxWIP {
+
+    
+    transform: scale(1.2);
+    transition: 3s;
+
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+
+    padding: 30px;
+    border-radius: 15px;
+
+    width: min(3000px, 100%);
+    margin: 50px auto 40px;
+
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
 }
 
 /* TOP BOX */
@@ -66,6 +96,9 @@ body {
 
 /* RIGHT BOX */
 .boxright {
+
+    
+
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(10px);
 
@@ -77,11 +110,14 @@ body {
 
     text-align: center;
 
+    margin: 50%;
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 
     box-sizing: border-box;
+    margin: 20%;
 }
 
 .boxhorizontal {
@@ -141,6 +177,15 @@ quote {
     font-size: 120%;
 }
 
+.underline{
+    text-decoration: underline;
+    color: white;
+}
+
+.underlineWIP{
+    text-decoration: underline;
+    color: red;
+}
 
 /* LINKS */
 a {
@@ -164,4 +209,11 @@ a:active {
     text-align: center;
     word-spacing: 100%;
     background-color:rgba(0, 0, 0, 0.5)
+}
+
+/* PDF */
+#myPDF{
+    width: 100%;
+    height: 975px;
+    align-self: center;
 }
