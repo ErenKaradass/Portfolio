@@ -1,4 +1,6 @@
 body {
+
+    
     background-image: url("grayline.jpg");
     background-size: cover;
     background-position: center;
@@ -26,7 +28,7 @@ body {
     padding: 30px;
     border-radius: 15px;
 
-    width: min(3000px, 100%);
+    width: min(1000px, 100%);
     margin: 50px auto 40px;
 
     text-align: center;
@@ -98,6 +100,7 @@ body {
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(10px);
 
+
     padding: 40px;
     border-radius: 30px;
 
@@ -116,6 +119,8 @@ body {
     grid-column: 2;
     align-self: start;
 }
+
+
 
 /* RIGHT BOX */
 .boxright {
@@ -215,13 +220,13 @@ quote {
 /* LINKS */
 a {
     font-family: 'Courier New', Courier, monospace;
-    font-size: 150%;
+    font-size: 120%;
     color: whitesmoke;
     transition: 0.5s;
 }
 
 a:hover {
-    font-size: 200%;
+    font-size: 150%;
 }
 
 a:active {
