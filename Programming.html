@@ -50,9 +50,129 @@
             <p data-i18n="ProgrammingPara5">I often times do pseudocode before writing actual code, so I can plan out the logic and structure of my programs before implementation.</p>
             <p data-i18n="ProgrammingPara6">I have worked with various game engines such as Unity, Unreal Engine, and Godot, and I have experience in creating games for desktop and VR.</p>
             <p data-i18n="ProgrammingPara7">Ive used various SDK's such as VRC-SDK and RRStudio (which sadly is no longer available)</p>
+
+            <section class="code-shelf" aria-labelledby="code-shelf-title">
+                <div class="code-shelf-heading">
+                    <div>
+                        <span class="code-kicker">CODE SHELF</span>
+                        <h2 id="code-shelf-title">Some things I have written</h2>
+                    </div>
+                    <span class="code-status">03 / snippets</span>
+                </div>
+
+                <div class="showcase-list">
+                    <article class="showcase-card">
+                        <div class="showcase-card-heading">
+                            <div>
+                                <h3>Inventory system</h3>
+                                <span>Unity / C#</span>
+                            </div>
+                            <button class="code-toggle" type="button" aria-expanded="false">View code</button>
+                        </div>
+
+                        <div class="showcase-panel media-panel">
+                            <iframe
+                                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                title="YouTube project preview"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                            <div class="media-caption">
+                                <strong>YouTube project preview</strong>
+                                <span>Replace the video ID with your own YouTube video.</span>
+                            </div>
+                        </div>
+
+                        <div class="showcase-panel code-panel" hidden>
+                            <pre><code>public void AddItem(Item item)
+{
+    if (items.Count &gt;= maxSlots)
+    {
+        Debug.Log("Inventory is full");
+        return;
+    }
+
+    items.Add(item);
+    RefreshInventoryUI();
+}</code></pre>
+                        </div>
+                    </article>
+
+                    <article class="showcase-card">
+                        <div class="showcase-card-heading">
+                            <div>
+                                <h3>Player health</h3>
+                                <span>Unity / C#</span>
+                            </div>
+                            <button class="code-toggle" type="button" aria-expanded="false">View code</button>
+                        </div>
+
+                        <div class="showcase-panel media-panel">
+                            <div class="media-placeholder">
+                                <span>VIDEO / IMAGE</span>
+                                <strong>Add your player health preview here</strong>
+                            </div>
+                        </div>
+
+                        <div class="showcase-panel code-panel" hidden>
+                            <pre><code>public void TakeDamage(int amount)
+{
+    currentHealth -= amount;
+
+    if (currentHealth &lt;= 0)
+    {
+        Die();
+    }
+}</code></pre>
+                        </div>
+                    </article>
+
+                    <article class="showcase-card">
+                        <div class="showcase-card-heading">
+                            <div>
+                                <h3>Theme switcher</h3>
+                                <span>JavaScript</span>
+                            </div>
+                            <button class="code-toggle" type="button" aria-expanded="false">View code</button>
+                        </div>
+
+                        <div class="showcase-panel media-panel">
+                            <div class="media-placeholder">
+                                <span>VIDEO / IMAGE</span>
+                                <strong>Add your theme switcher preview here</strong>
+                            </div>
+                        </div>
+
+                        <div class="showcase-panel code-panel" hidden>
+                            <pre><code>function switchTheme(theme) {
+    document.body.dataset.theme = theme;
+    localStorage.setItem(
+        "portfolioTheme",
+        theme
+    );
+}</code></pre>
+                        </div>
+                    </article>
+                </div>
+            </section>
         </div>
 
 
+        <script>
+            document.querySelectorAll(".code-toggle").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const showcaseCard = button.closest(".showcase-card");
+                    const mediaPanel = showcaseCard.querySelector(".media-panel");
+                    const codePanel = showcaseCard.querySelector(".code-panel");
+                    const showingCode = button.getAttribute("aria-expanded") === "true";
+
+                    mediaPanel.hidden = !showingCode;
+                    codePanel.hidden = showingCode;
+                    button.setAttribute("aria-expanded", String(!showingCode));
+                    button.textContent = showingCode ? "View code" : "View media";
+                });
+            });
+        </script>
         <script src="translator.js"></script>
     </body>    
 </html>
