@@ -281,7 +281,7 @@ public class MasterMindV1_2 {
                         <div class="showcase-panel media-panel">
                             <div class="media-placeholder">
                                 <span>VIDEO / IMAGE</span>
-                                <strong>Add your player health preview here</strong>
+                                <strong>Add your mine sweeper preview here</strong>
                             </div>
                         </div>
 
@@ -759,8 +759,175 @@ public class TaschenrechnerV3 {
     }
 }</code></pre>
                         
-                    </article>
+
+    </div>
+        </article>    
                     
+
+        <article class="showcase-card">
+                        <div class="showcase-card-heading">
+                            <div>
+                                <h3>Millionare Show</h3>
+                                <span>Java</span>
+                            </div>
+                            <button class="code-toggle" type="button" aria-expanded="false">View code</button>
+                        </div>
+
+                        <div class="showcase-panel media-panel">
+                            <div class="media-placeholder">
+                                <span>VIDEO / IMAGE</span>
+                                <strong>Add your millionare show preview here</strong>
+                            </div>
+                        </div>
+
+                        <div class="showcase-panel code-panel" hidden>
+                            <pre><code>import java.util.Random;
+import java.util.Scanner;
+
+public class Millionenshow1_1 {
+    public static void main(String[] args) {
+        String[][] questions = {
+                {"Was bedeutet HTML?", "HyperText Markup Language", "HighText Machine Language", "Hyperlink and Text Markup Language", "1"},
+                {"Welches Ergebnis liefert folgender Ausdruck: (true&&false||true)", "false", "true", "2"},
+                {"Die Netzwerk-Technik verwendet man ...", "beim Fischen", "zum Vernetzen von Computern", "2"},
+                {"Ein Null-pointer ...", "gibt es nicht", "ist eine Referenz, die auf kein Objekt zeigt", "Datentyp für Text", "ärgerlich", "2"},
+                {"Eine 'if-Schleife' ist ...", "eine Schleif-Machine für Tischler", "ein Kündigungsgrund", "gibt es nicht", "3"},
+                {"Was macht ein Compiler?", "Er analysiert Netzwerke", "Er führt Programme aus", "Er wandelt Quellcode in Maschinencode um", "Er speichert Dateien", "3"}
+        };
+
+        Random rng = new Random();
+        Scanner sc = new Scanner(System.in);
+        int user_input;
+        int counter = 0;
+        String top_ui_formatter = "%8s";
+        String bottom_ui_formatter = "%s25 %s25 %s25 %s25";
+
+
+        for (int i = 0; i < questions.length; i++){
+            int chosen = rng.nextInt(questions.length);
+
+            // save
+            String[] temp_questions = questions[i];
+            // put new value
+            questions[i] = questions[chosen];
+            // set the save to correct one
+            questions[chosen] = temp_questions;
+        }
+
+
+        for (int i = 0; i < questions.length; i++) {
+            for (int j = 0; j < questions[i].length; j++) {
+                System.out.print(questions[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        // clear terminal
+        for (int clear = 0; clear < 10; clear++){
+            System.out.println();
+        }
+
+
+
+        System.out.printf(top_ui_formatter, questions[counter][0]);
+        System.out.println("");
+        System.out.println("--------------------------");
+        System.out.println("");
+
+
+        for (int questions_show = 1; questions_show < questions[counter].length -1; questions_show++){
+            System.out.println(questions_show + " " +questions[counter][questions_show]);
+        }
+
+
+        int index = -1;
+        // stuck here
+        System.out.println(questions[counter][questions.length - 1]);
+        user_input = sc.nextInt();
+
+        int number = Integer.parseInt(questions[counter][questions.length -1]);
+
+        if (user_input == number){
+            System.out.println("Correct!!!");
+        }
+
+    }
+}</code></pre>
+
+</div>
+        </article>    
+                    
+
+        <article class="showcase-card">
+                        <div class="showcase-card-heading">
+                            <div>
+                                <h3>CyberSecurity</h3>
+                                <span>Java</span>
+                            </div>
+                            <button class="code-toggle" type="button" aria-expanded="false">View code</button>
+                        </div>
+
+                        <div class="showcase-panel media-panel">
+                            <div class="media-placeholder">
+                                <span>VIDEO / IMAGE</span>
+                                <strong>Add your calculator preview here</strong>
+                            </div>
+                        </div>
+
+                        <div class="showcase-panel code-panel" hidden>
+                            <pre><code>import java.util.Random;
+
+public class CyberSecurityV1 {
+    static void main(String[] args) {
+
+        Random rng = new Random();
+        String password_example = "ABCabc012!";
+
+
+        int guesses = 0;
+        String s = "";
+        String cracked_password = "";
+
+        String generated = "";
+
+
+        for (int i = 0; i < 4; i++) {
+            generated += password_example.charAt(rng.nextInt(10));
+        }
+
+        System.out.print(generated);
+
+
+        for (int first_letter = 0; first_letter < password_example.length(); first_letter++) {
+            for (int second_letter = 0; second_letter < password_example.length(); second_letter++) {
+                for (int third_letter = 0; third_letter < password_example.length(); third_letter++) {
+                    for (int fourth_letter = 0; fourth_letter < password_example.length(); fourth_letter++) {
+                        s = "" + password_example.charAt(first_letter) + password_example.charAt(second_letter) + password_example.charAt(third_letter) + password_example.charAt(fourth_letter);
+                        guesses++;
+
+
+                        if (s.equals(generated)) {
+
+                            for (int fake_clear_terminal = 0; fake_clear_terminal < 5; fake_clear_terminal++){
+                                System.out.println("");
+                            }
+                            cracked_password = s;
+                            System.out.println("");
+                            System.out.println("Total Guesses: " + guesses);
+                        }
+
+
+                    }
+                }
+            }
+        }
+
+        System.out.println(cracked_password);
+    }
+}</code></pre>
+
+                            
+
 
 
                 </div>
