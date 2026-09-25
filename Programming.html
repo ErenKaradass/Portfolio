@@ -64,8 +64,8 @@
                     <article class="showcase-card">
                         <div class="showcase-card-heading">
                             <div>
-                                <h3>Inventory system</h3>
-                                <span>Unity / C#</span>
+                                <h3>MasterMind board Game</h3>
+                                <span>Java</span>
                             </div>
                             <button class="code-toggle" type="button" aria-expanded="false">View code</button>
                         </div>
@@ -84,16 +84,187 @@
                         </div>
 
                         <div class="showcase-panel code-panel" hidden>
-                            <pre><code>public void AddItem(Item item)
-{
-    if (items.Count &gt;= maxSlots)
-    {
-        Debug.Log("Inventory is full");
-        return;
+                            <pre><code>import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
+public class MasterMindV1_2 {
+
+    static boolean gameActive = true;
+    static Random rng = new Random();
+    static Scanner sc = new Scanner(System.in);
+
+    static final int code_len = 4;
+    static final int colors = 6;
+    static final int tries = 8;
+
+    public static void main(String[] args) {
+
+        int[] secret = createSecret();
+        // Debug (optional): show secret
+        System.out.println("Secret (debug): " + Arrays.toString(secret));
+
+        int[][] map = new int[tries][6]; // col 0-3 guess, col4 black, col5 white
+        int currentRow = 0;
+
+        while (gameActive && currentRow < tries) {
+
+            int[] guess = readUserInput();
+            int[] result = evaluate(guess, secret); // [black, white]
+
+            // store guess
+            for (int i = 0; i < code_len; i++) {
+                map[currentRow][i] = guess[i];
+            }
+
+            // store feedback
+            map[currentRow][4] = result[0]; // black
+            map[currentRow][5] = result[1]; // white
+
+            // print board
+            print(map);
+
+            // win?
+            if (result[0] == code_len) {
+                System.out.println("You Win!");
+                gameActive = false;
+                break;
+            }
+
+            currentRow++;
+
+            // out of tries?
+            if (currentRow == tries) {
+                System.out.println("GAME OVER");
+                System.out.println("It was: " + Arrays.toString(secret));
+                gameActive = false;
+            }
+        }
     }
 
-    items.Add(item);
-    RefreshInventoryUI();
+    /**
+     * Evaluates a guess against the secret combination.
+     * @return int[]{black, white}
+     */
+    static int[] evaluate(int[] guess, int[] secret) {
+
+        int black = 0;
+        int white = 0;
+
+        boolean[] secretUsed = new boolean[code_len];
+        boolean[] guessUsed = new boolean[code_len];
+
+        // 1) black pegs
+        for (int i = 0; i < code_len; i++) {
+            if (guess[i] == secret[i]) {
+                black++;
+                secretUsed[i] = true;
+                guessUsed[i] = true;
+            }
+        }
+
+        // 2) white pegs
+        for (int i = 0; i < code_len; i++) {
+            if (guessUsed[i]) continue;
+
+            for (int j = 0; j < code_len; j++) {
+                if (!secretUsed[j] && guess[i] == secret[j]) {
+                    white++;
+                    secretUsed[j] = true;
+                    break;
+                }
+            }
+        }
+
+        System.out.println("Correct (black): " + black);
+        System.out.println("Wrong order (white): " + white);
+
+        return new int[]{black, white};
+    }
+
+    /**
+     * Creates secret combination (4 random ints 1..6)
+     */
+    static int[] createSecret() {
+        int[] secret = new int[code_len];
+        for (int i = 0; i < code_len; i++) {
+            secret[i] = rng.nextInt(colors) + 1; // 1..6
+        }
+        return secret;
+    }
+
+    /**
+     * Reads user input as 4 digits, each 1..6.
+     * Accepts input like: 1541
+     */
+    static int[] readUserInput() {
+        while (true) {
+            System.out.print("-> ");
+            String s = sc.next().trim();
+
+            if (s.length() != code_len) {
+                System.out.println("Invalid length. Please enter exactly 4 digits (1-6).");
+                continue;
+            }
+
+            int[] guess = new int[code_len];
+            boolean ok = true;
+
+            for (int i = 0; i < code_len; i++) {
+                char c = s.charAt(i);
+                if (c < '1' || c > '6') {
+                    ok = false;
+                    break;
+                }
+                guess[i] = c - '0';
+            }
+
+            if (!ok) {
+                System.out.println("Invalid input. Use only digits 1..6 (example: 1541).");
+                continue;
+            }
+
+            return guess;
+        }
+    }
+
+    /**
+     * Prints the game board.
+     * map[row][0-3] = guess
+     * map[row][4]   = black
+     * map[row][5]   = white
+     */
+    static void print(int[][] map) {
+        for (int row = 0; row < map.length; row++) {
+
+            System.out.println("+---+---+---+---+------+");
+
+            System.out.print("|");
+            for (int col = 0; col < 4; col++) {
+                if (map[row][col] == 0) {
+                    System.out.print("   |");
+                } else {
+                    System.out.print(" " + map[row][col] + " |");
+                }
+            }
+
+            System.out.print(" ");
+
+            int black = map[row][4];
+            int white = map[row][5];
+
+            for (int i = 0; i < black; i++) System.out.print("#");
+            for (int i = 0; i < white; i++) System.out.print("+");
+
+            // pad feedback area to fixed width (4)
+            for (int i = black + white; i < 4; i++) System.out.print(" ");
+
+            System.out.println("|");
+        }
+
+        System.out.println("+---+---+---+---+------+");
+    }
+}
 }</code></pre>
                         </div>
                     </article>
@@ -101,8 +272,8 @@
                     <article class="showcase-card">
                         <div class="showcase-card-heading">
                             <div>
-                                <h3>Player health</h3>
-                                <span>Unity / C#</span>
+                                <h3>MineSweeper</h3>
+                                <span>Java</span>
                             </div>
                             <button class="code-toggle" type="button" aria-expanded="false">View code</button>
                         </div>
@@ -115,13 +286,150 @@
                         </div>
 
                         <div class="showcase-panel code-panel" hidden>
-                            <pre><code>public void TakeDamage(int amount)
-{
-    currentHealth -= amount;
+                            <pre><code>import java.util.Random;
+import java.util.Scanner;
 
-    if (currentHealth &lt;= 0)
-    {
-        Die();
+public class MinesweeperV2 {
+    static void main(String[] args) {
+
+        int[][] map = new int[10][10];
+        Random rng = new Random();
+        Scanner sc = new Scanner(System.in);
+        String formatter_top_ui = "%3s";
+        String[] alpha_pattern = {"A","B","C","D","E","F","G","H","I","J"};
+        int field_count = 100;
+        int mineCount = 0;
+        boolean gameActive = true;
+        String user_input;
+        boolean valid = false;
+        double percent = 0.0;
+        int clearedCount = 0;
+        int[] nbr_coord = {-1,1};
+
+
+            for (int i = 0; i < map.length; i++){
+                for (int j = 0; j < map.length; j++){
+                    int randomized = rng.nextInt(-3,1);
+                    map[i][j] = randomized;
+                    if (randomized == 0){
+                        mineCount++;
+                    }
+                }
+            }
+
+            field_count = field_count - mineCount;
+
+
+
+        while  (gameActive){
+
+            // print
+            for (int alphabet_row = 0; alphabet_row < 10 ; alphabet_row++){
+                System.out.printf(formatter_top_ui, alpha_pattern[alphabet_row]);
+            }
+
+            for (int show_row = 0; show_row < 10; show_row++){
+                System.out.println("");
+                System.out.print(show_row);
+
+                for (int show_col = 0; show_col < 10; show_col++){
+                    if (map[show_col][show_row] == 99){
+                        System.out.print("[-]");
+                    } else if (map[show_col][show_row] == 5) {
+                        System.out.print("[*]");
+                    }else {
+                        System.out.print("[ ]");
+                    }
+                }
+            }
+            System.out.println("");
+            percent = Math.round((double) clearedCount / field_count * 10000) / 100.0; // percentage
+            System.out.println("There are " + field_count + " Fields left!  " + percent + "% Completed");
+            System.out.println("There are " + mineCount + " Mines!");
+
+
+
+
+            while (valid == false){
+
+                user_input = sc.nextLine().trim().toUpperCase();
+                // get alphabet
+                char row_char = user_input.charAt(0);
+                int row = row_char - 'A';
+                // get number
+                int col = Character.getNumericValue(user_input.charAt(1));
+
+                // check if the user input is valid and if the place has been taken
+                if (row < 0 || row >= 10 || col < 0 || col > 10 || map[row][col] == 99 || map[row][col] == 5){
+                    System.out.println("Invalid");
+                }else{
+                    if (map[row][col] == 0){
+                        map[row][col] = 5; // this is now mine
+                        gameActive = false;
+                        mineCount--;
+                    }else {
+                        map[row][col] = 99; // this is now empty field
+
+                        field_count--;
+                        clearedCount++;     // for percentage of completed fields
+                    }
+                    valid = true;
+                }
+
+
+
+
+                for (int s = 0; s <= 1; s++){
+                    for (int k = 0; k <= 1; k++){
+
+                        try{
+                            // this is to detect the neighbours if they are a bomb or just a normal field
+
+                            if (col + nbr_coord[s] >= 0 && col + nbr_coord[s] <= 9){
+
+                                if (map[row][col + nbr_coord[s]] < 0) {
+                                    map[row][col + nbr_coord[s]] = 99;
+                                    field_count--;
+                                }else if(map[row][col + nbr_coord[s]] == 0){
+                                    map[row][col + nbr_coord[s]] = 5;
+                                    mineCount--;
+                                }
+                            }
+
+                            if (row + nbr_coord[s] >= 0 && row + nbr_coord[s] <= 9){
+
+                                if (map[row + nbr_coord[s]][col] < 0){
+                                    map[row + nbr_coord[s]][col] = 99;
+                                    field_count--;
+                                }else if(map[row + nbr_coord[s]][col] == 0 ){
+                                    map[row + nbr_coord[s]][col] = 5;
+                                    mineCount--;
+                                }
+                            }
+
+                        }catch (ArrayIndexOutOfBoundsException e){
+                            System.out.println("Out of boundsssss");
+                        }
+
+                    }
+
+                }
+            }
+
+
+            // clear terminal
+            for (int clear = 0; clear < 3; clear++){
+                System.out.println();
+            }
+            System.out.println("");
+            percent = Math.round((double) clearedCount / field_count * 10000) / 100.0; // percentage
+            System.out.println("There are " + field_count + " Fields left!  " + percent + "% Completed");
+            System.out.println("There are " + mineCount + " Mines!");
+            if (gameActive == false){
+                System.out.println("That was a Mine..");
+            }
+            valid = false;
+        }
     }
 }</code></pre>
                         </div>
@@ -130,8 +438,8 @@
                     <article class="showcase-card">
                         <div class="showcase-card-heading">
                             <div>
-                                <h3>Theme switcher</h3>
-                                <span>JavaScript</span>
+                                <h3>Statistics</h3>
+                                <span>Java</span>
                             </div>
                             <button class="code-toggle" type="button" aria-expanded="false">View code</button>
                         </div>
@@ -139,20 +447,322 @@
                         <div class="showcase-panel media-panel">
                             <div class="media-placeholder">
                                 <span>VIDEO / IMAGE</span>
-                                <strong>Add your theme switcher preview here</strong>
+                                <strong>Add your statistics preview here</strong>
                             </div>
                         </div>
 
                         <div class="showcase-panel code-panel" hidden>
-                            <pre><code>function switchTheme(theme) {
-    document.body.dataset.theme = theme;
-    localStorage.setItem(
-        "portfolioTheme",
-        theme
-    );
+                            <pre><code>import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Random;
+
+public class StatistikV3 {
+
+    public static void main(String[] args) {
+
+        Random rng = new Random();
+        int[] values = new int[10];
+
+        // generate random values between 0 and 10
+        for (int i = 0; i < values.length; i++) {
+            values[i] = rng.nextInt(11);
+        }
+
+        System.out.println("Urliste:");
+        printArray(values);
+
+        // sorting
+        int[] sorted = Arrays.copyOf(values, values.length);
+        Arrays.sort(sorted);
+
+        System.out.println("\nAufsteigend sortiert:");
+        printArray(sorted);
+
+        System.out.println("\nArithmetisches Mittel: " + mean(values));
+        System.out.println("Spannweite: " + (max(values) - min(values)));
+        System.out.println("Median: " + median(sorted));
+
+        int[] modalResult = modal(sorted);
+        System.out.println("Modalwert: " + modalResult[0] + " mit " + modalResult[1]);
+
+        System.out.println("Mittlere absolute Abweichung: " + mad(values));
+    }
+
+    // methods
+
+    public static int min(int[] values) {
+        int min = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] < min) {
+                min = values[i];
+            }
+        }
+        return min;
+    }
+
+    public static int max(int[] values) {
+        int max = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] > max) {
+                max = values[i];
+            }
+        }
+        return max;
+    }
+
+    public static int sum(int[] values) {
+        int sum = 0;
+        for (int i = 0; i < values.length; i++) {
+            sum += values[i];
+        }
+        return sum;
+    }
+
+    public static double mean(int[] values) {
+        return (double) sum(values) / values.length;
+    }
+
+    public static double median(int[] values) {
+        int n = values.length;
+
+        if (n % 2 == 0) {
+            return (values[n / 2 - 1] + values[n / 2]) / 2.0;
+        } else {
+            return values[n / 2];
+        }
+    }
+
+    public static int[] modal(int[] values) {
+        int modalValue = values[0];
+        int modalCount = 1;
+
+        int currentValue = values[0];
+        int currentCount = 1;
+
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] == currentValue) {
+                currentCount++;
+            } else {
+                currentValue = values[i];
+                currentCount = 1;
+            }
+
+            if (currentCount > modalCount) {
+                modalCount = currentCount;
+                modalValue = currentValue;
+            }
+        }
+
+        return new int[]{modalValue, modalCount};
+    }
+
+    public static double mad(int[] values) {
+        double mean = mean(values);
+        double sumDeviation = 0;
+
+        for (int i = 0; i < values.length; i++) {
+            sumDeviation += Math.abs(values[i] - mean);
+        }
+
+        return sumDeviation / values.length;
+    }
+
+    public static void printArray(int[] values) {
+        for (int i = 0; i < values.length; i++) {
+            System.out.print("[" + values[i] + "]");
+        }
+        System.out.println();
+    }
 }</code></pre>
                         </div>
                     </article>
+
+                    <article class="showcase-card">
+                        <div class="showcase-card-heading">
+                            <div>
+                                <h3>Caesar Cipher</h3>
+                                <span>Java</span>
+                            </div>
+                            <button class="code-toggle" type="button" aria-expanded="false">View code</button>
+                        </div>
+
+                        <div class="showcase-panel media-panel">
+                            <div class="media-placeholder">
+                                <span>VIDEO / IMAGE</span>
+                                <strong>Add your Caesar Cipher preview here</strong>
+                            </div>
+                        </div>
+
+                        <div class="showcase-panel code-panel" hidden>
+                            <pre><code>public class CaesarCipher {
+
+
+    // convert to uppercase, replaces umlauts, removes non A-Z characters
+    static String normalize(String text) {
+        text = text.toUpperCase();
+
+        // Replace German umlauts
+        text = text.replace("Ä", "AE")
+                .replace("Ö", "OE")
+                .replace("Ü", "UE")
+                .replace("ß", "SS");
+
+        StringBuilder result = new StringBuilder();
+
+        for (char c : text.toCharArray()) {
+            if (c >= 'A' && c <= 'Z') {
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+
+    // Caesar encryption with fixed key
+    static String encrypt(String text, int key) {
+        StringBuilder result = new StringBuilder();
+
+        for (char c : text.toCharArray()) {
+            int shifted = (c - 'A' + key) % 26;
+            result.append((char) ('A' + shifted));
+        }
+        return result.toString();
+    }
+
+    // caesar decryption with fixed key
+    static String decrypt(String text, int key) {
+        StringBuilder result = new StringBuilder();
+
+        for (char c : text.toCharArray()) {
+            int shifted = (c - 'A' - key + 26) % 26;
+            result.append((char) ('A' + shifted));
+        }
+        return result.toString();
+    }
+
+    // caeser enhanced
+
+    static String crypt(String text, String pass, boolean encrypt) {
+        text = normalize(text);
+        pass = normalize(pass);
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i++) {
+            char textChar = text.charAt(i);
+            char passChar = pass.charAt(i % pass.length());
+
+            int key = passChar - 'A'; // A=0, B=1, ..., Z=25
+
+            int shifted;
+            if (encrypt) {
+                shifted = (textChar - 'A' + key) % 26;
+            } else {
+                shifted = (textChar - 'A' - key + 26) % 26;
+            }
+
+            result.append((char) ('A' + shifted));
+        }
+
+        return result.toString();
+    }
+
+    // print
+
+    public static void main(String[] args) {
+
+        // TASK 1 TEST
+        String original = "Hallo XY!";
+        int key = 3;
+
+        String normalized = normalize(original);
+        String encrypted = encrypt(normalized, key);
+        String decrypted = decrypt(encrypted, key);
+
+        System.out.println("=== TASK 1 ===");
+        System.out.println("Original:   " + original);
+        System.out.println("Normalized: " + normalized);
+        System.out.println("Encrypted:  " + encrypted);
+        System.out.println("Decrypted:  " + decrypted);
+
+        // 2 test
+        String text = "HELLOXWORLDX";
+        String password = "IBIS";
+
+        String encryptedEnhanced = crypt(text, password, true);
+        String decryptedEnhanced = crypt(encryptedEnhanced, password, false);
+
+        System.out.println("\n=== TASK 2 ===");
+        System.out.println("Original:   " + text);
+        System.out.println("Password:   " + password);
+        System.out.println("Encrypted:  " + encryptedEnhanced);
+        System.out.println("Decrypted:  " + decryptedEnhanced);
+    }
+}</code></pre>
+
+</div>
+                    </article>
+
+                    <article class="showcase-card">
+                        <div class="showcase-card-heading">
+                            <div>
+                                <h3>Calculator</h3>
+                                <span>Java</span>
+                            </div>
+                            <button class="code-toggle" type="button" aria-expanded="false">View code</button>
+                        </div>
+
+                        <div class="showcase-panel media-panel">
+                            <div class="media-placeholder">
+                                <span>VIDEO / IMAGE</span>
+                                <strong>Add your calculator preview here</strong>
+                            </div>
+                        </div>
+
+                        <div class="showcase-panel code-panel" hidden>
+                            <pre><code>import java.util.Scanner;
+
+public class TaschenrechnerV3 {
+    static void main(String[] args) {
+
+        boolean exit = false;
+
+        while (exit == false){
+
+            System.out.println("Input your first Number");
+            Scanner sc = new Scanner(System.in);
+            int x = sc.nextInt();
+
+            System.out.println("Input your second Number");
+            int y = sc.nextInt();
+
+            // Char: + - * / %
+
+            System.out.println("With what would you like to calculate?");
+            System.out.println("+ - * / %.  X=Close Terminal");
+
+            char character = sc.next().charAt(0);
+
+            switch (character) {
+                case '+' -> System.out.println(x + "+" + y + "=" + (x + y));
+                case '-' -> System.out.println(x + "-" + y + "=" + (x - y));
+                case '*' -> System.out.println(x + "*" + y + "=" + (x * y));
+                case '/' -> System.out.println(x + "/" + y + "=" + (x / y));
+                case '%' -> System.out.println(x + "%" + y + "=" + (x % y));
+                case 'x' -> exit = true;
+                default -> System.out.println("invalid");
+            }
+
+        }
+
+
+    }
+}</code></pre>
+                        
+                    </article>
+                    
+
+
                 </div>
             </section>
         </div>
